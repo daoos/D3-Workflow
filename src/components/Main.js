@@ -2,15 +2,24 @@ require('normalize.css/normalize.css');
 require('styles/App.css');
 
 import React from 'react';
-
-let yeomanImage = require('../images/yeoman.png');
+// import Line from './Line/Line';
+// import Area from './Area/Area';
+// import Workflow from './Workflow/Workflow';
+// import Bar from './Bar/Bar';
+// import Trag from './Trag/Trag';
+// import Dagre from './Dagre/Dagre';
+import Pde from './Pde/Pde';
 
 class AppComponent extends React.Component {
+
+  constructor(){
+    super();
+  }
+
   render() {
     return (
       <div className="index">
-        <img src={yeomanImage} alt="Yeoman Generator" />
-        <div className="notice">Please edit <code>src/components/Main.js</code> to get started!</div>
+        <Pde/>
       </div>
     );
   }

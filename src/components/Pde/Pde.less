@@ -1,0 +1,118 @@
+#container-pde {
+  background: seashell;
+  .control-list {
+    display: flex;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 2px;
+    background: white;
+    li {
+      border-left: 0.5px solid rgb(235, 233, 233);
+      list-style-type: none;
+    }
+    .control {
+      position: relative;
+      display: inline-block;
+      padding: 6px 8px;
+    }
+
+    .control button {
+      padding: 0;
+      outline: none;
+      cursor: pointer;
+      font-size: 22px;
+      line-height: 26px;
+      color: #555;
+      background: none;
+      border: none;
+    }
+
+    .control .openFile {
+      display: none;
+    }
+
+    .control.line:after {
+      content: '';
+      position: absolute;
+      top: 50%;
+      right: 0;
+      transform: translateY(-50%);
+      height: 16px;
+      border-right: 1px solid #ddd;
+    }
+
+    .control button i {
+      display: inline-block;
+      width: 24px;
+      height: 22px;
+      vertical-align: middle;
+    }
+    .control:hover {
+      color: #fff;
+      fill: #fff;
+      background: #cccccc;
+    }
+  }
+  #hb-bpmn{
+    width: 100%;
+    height: 500px;
+  }
+}
+
+.add {
+  background: url('../../assets/images/icon/add.svg') 0 0 no-repeat;
+}
+
+.addChild {
+  background: url('../../assets/images/icon/addChild.svg') 0 0 no-repeat;
+}
+
+.addBq {
+  background: url('../../assets/images/icon/addBq.svg') 0 0 no-repeat;
+}
+
+.copy {
+  background: url('../../assets/images/icon/copy.svg') 0 0 no-repeat;
+}
+
+.delete {
+  background: url('../../assets/images/icon/delete.svg') 0 0 no-repeat;
+}
+
+.zoom {
+  background: url('../../assets/images/icon/zoom.svg') 0 0 no-repeat;
+}
+
+.zoomIn {
+  background: url('../../assets/images/icon/zoomIn.svg') 0 0 no-repeat;
+}
+
+.zoomOut {
+  height: 8px !important;
+  background: url('../../assets/images/icon/zoomOut.svg') 0 0 no-repeat;
+}
+
+.undo {
+  background: url('../../assets/images/icon/undo.svg') 0 0 no-repeat;
+}
+
+.redo {
+  background: url('../../assets/images/icon/redo.svg') 0 0 no-repeat;
+}
+
+.save {
+  background: url('../../assets/images/icon/save.svg') 0 0 no-repeat;
+}
+
+.download {
+  background: url('../../assets/images/icon/download.svg') 0 0 no-repeat;
+}
+
+.image {
+  background: url('../../assets/images/icon/image.svg') 0 0 no-repeat;
+}
+
+.open {
+  background: url('../../assets/images/icon/open.svg') 0 0 no-repeat;
+}

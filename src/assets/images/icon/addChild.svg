@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="24px" height="20px" viewBox="0 0 24 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>插入子流程</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="PDE--v1.3.1-表单元素" transform="translate(-110.000000, -121.000000)" stroke="#666666">
+            <g id="流程图icon" transform="translate(20.000000, 114.000000)">
+                <g id="插入子流程" transform="translate(90.000000, 7.000000)">
+                    <rect id="Rectangle-12" stroke-width="2" x="1" y="1" width="12" height="8" rx="2"></rect>
+                    <rect id="Rectangle-12" stroke-width="2" x="15" y="15" width="8" height="4" rx="1"></rect>
+                    <path d="M3,13 L11,13" id="Line-4" stroke-width="1.5" stroke-linecap="square" transform="translate(7.000000, 13.000000) rotate(90.000000) translate(-7.000000, -13.000000) "></path>
+                    <path d="M8,17 L14,17" id="Line-4" stroke-width="1.5" stroke-linecap="square"></path>
+                    <g id="Group-5" transform="translate(17.000000, 5.000000)" stroke-linecap="square" stroke-width="1.5">
+                        <path d="M0,3 L5,3" id="Line-4"></path>
+                        <path d="M0,3 L5,3" id="Line-4" transform="translate(2.500000, 3.000000) rotate(90.000000) translate(-2.500000, -3.000000) "></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

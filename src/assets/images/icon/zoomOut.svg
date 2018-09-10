@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="16px" height="2px" viewBox="0 0 16 2" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>缩小</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="PDE--v1.3.1-表单元素" transform="translate(-409.000000, -130.000000)" fill="#666666" fill-rule="nonzero">
+            <g id="流程图icon" transform="translate(20.000000, 114.000000)">
+                <path d="M404.113527,16 L398.386439,16 L396.613561,16 L389.886439,16 C389.396869,16 389,16.3968699 389,16.8864276 C389,17.376002 389.396869,17.7729051 389.886439,17.7729051 L396.613561,17.7729051 L398.386439,17.7729051 L404.113527,17.7729051 C404.603131,17.7729051 405,17.376002 405,16.8864276 C405,16.3968699 404.603131,16 404.113527,16 Z" id="缩小"></path>
+            </g>
+        </g>
+    </g>
+</svg>

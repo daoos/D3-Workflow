@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="20px" height="20px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.1 (51147) - http://www.bohemiancoding.com/sketch -->
+    <title>插入新节点</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="PDE--v1.3.1-表单元素" transform="translate(-70.000000, -121.000000)" fill="#666666" fill-rule="nonzero">
+            <g id="流程图icon" transform="translate(20.000000, 114.000000)">
+                <g id="插入新节点" transform="translate(50.000000, 7.000000)">
+                    <path d="M17,0 L3,0 C1.35,0 0,1.35 0,3 L0,17 C0,18.65 1.35,20 3,20 L17,20 C18.65,20 20,18.65 20,17 L20,3 C20,1.35 18.65,6.66133815e-16 17,6.66133815e-16 M17,1.99999999 C17.542,1.99999999 18,2.45799999 18,3 L18,17 C18,17.542 17.542,18 17,18 L3,18 C2.45800001,18 1.99999999,17.542 1.99999999,17 L1.99999999,3 C1.99999999,2.45800001 2.45799999,1.99999999 3,1.99999999 L17,1.99999999" id="Shape"></path>
+                    <path d="M9,14.8 L9,5.20000001 C9,4.54 9.45,4 9.99999999,4 C10.55,4 11,4.54 11,5.20000001 L11,14.8 C11,15.46 10.55,16 9.99999999,16 C9.44999998,16 8.99999998,15.46 9,14.8" id="Shape"></path>
+                    <path d="M14.8,11 L5.20000001,11 C4.54,11 4,10.55 4,9.99999999 C4,9.44999998 4.54,8.99999998 5.20000001,9 L14.8,9 C15.46,9 16,9.45 16,9.99999999 C16,10.55 15.46,11 14.8,11" id="Shape"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>
