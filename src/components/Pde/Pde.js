@@ -20,31 +20,27 @@ class Pde extends Component {
     //svg
     this.svg = null
 
-    this.drag = D3.drag()
-      .on('drag', this.dragMove);
-    //
     this.dx = 0;
     this.dy = 0;
     this.dragElem = null;
 
     this.addNode = this.addNode.bind(this);
 
+    this.state = {}
   }
 
   componentDidMount() {
 
-    this.svg = D3.select('#hb-bpmn');
+    this.svg = D3.select('#hb-bpmn')
+      .append('g')
+      .attr('class', 'viewport');
 
     let circle = this.svg.selectAll('circle')
       .data(this.circles)
       .enter()
       .append('circle')
-      .attr('cx', function (d) {
-        return d.cx;
-      })
-      .attr('cy', function (d) {
-        return d.cy;
-      })
+      .attr('cx', d => d.cx)
+      .attr('cy', d => d.cy)
       .attr('r', function (d) {
         return d.r;
       })
@@ -52,12 +48,14 @@ class Pde extends Component {
       .attr('stroke-width', '2px')
       .attr('fill', '#fff')
       .attr('fill-opacity', .95)
+      .attr('class', 'zz zb')
+      .classed('zz', false)
+      .classed('zb', true)
       .style('cursor', 'pointer')
-      .call(this.drag)
-
-    circle.append('text').text('开始');  //这里是刚才定义的drag行为
-
-
+      .call(
+        D3.drag()
+          .on('drag', this.dragMove)
+      )
   }
 
   // 拖拽
@@ -80,14 +78,18 @@ class Pde extends Component {
       id: new Date().getTime(),
       dataId: D3.select(el).attr('data-id'),
       text: D3.select(el).attr('title'),
-      x: 220,
-      y: 200
+      x: 155,
+      y: (170 * D3.selectAll('.node').size()) + 170 //自动布局
     };
 
+    // console.log();
     let g = this.svg.append('g')
+      // .data(node)
       .attr('class', 'node')
       .attr('data-id', node.dataId)
       .attr('id', node.id)
+      // .attr('x', d => d.x)
+      // .attr('y', d => d.y)
       .attr('transform', 'translate(' + node.x + ', ' + node.y + ')')
       .call(
         D3.drag()
@@ -135,8 +137,8 @@ class Pde extends Component {
   }
 
   dragGed() {
-    this.dragElem.attr("transform", "translate(" + (D3.event.x - this.dx) + ", " + (D3.event.y - this.dy) + ")");
-    // this.updateCable(this.dragElem);
+    this.dragElem.attr('transform', 'translate(' + (D3.event.x - this.dx) + ', ' + (D3.event.y - this.dy) + ')');
+    this.updateCable(this.dragElem);
   }
 
   dragEnded() {

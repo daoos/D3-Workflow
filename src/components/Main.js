@@ -7,8 +7,9 @@ import React from 'react';
 // import Workflow from './Workflow/Workflow';
 // import Bar from './Bar/Bar';
 // import Trag from './Trag/Trag';
-// import Dagre from './Dagre/Dagre';
+import Dagre from './Dagre/Dagre';
 import Pde from './Pde/Pde';
+import Tree from './Tree/Tree';
 
 class AppComponent extends React.Component {
 
@@ -19,7 +20,8 @@ class AppComponent extends React.Component {
   render() {
     return (
       <div className="index">
-        <Pde/>
+        <Tree></Tree>
+        <Pde></Pde>
       </div>
     );
   }
