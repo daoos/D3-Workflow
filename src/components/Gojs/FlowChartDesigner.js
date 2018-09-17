@@ -6,8 +6,9 @@ class FlowChartDesigner {
     this.G = go.GraphObject.make;
     this._designer = {};
     this._jsonNewStep = {key: this.guid(), text: '新步骤', remark: ''};
-    this.onDiagramModified = this.onDiagramModified.bind(this)
-    this.onObjectDoubleClicked = this.onObjectDoubleClicked.bind(this)
+    this.onDiagramModified = this.onDiagramModified.bind(this);
+    this.onObjectDoubleClicked = this.onObjectDoubleClicked.bind(this);
+    this.setLinkTextBg = this.setLinkTextBg.bind(this);
   }
 
   /**
@@ -75,19 +76,53 @@ class FlowChartDesigner {
    * @returns {*}
    */
   initToolbar(div) {
-    let myPalette =
-      this.G(go.Palette, div, // 必须是DIV元素
-        {
-          maxSelectionCount: 3,
-          nodeTemplateMap: this._designer.nodeTemplateMap, // 跟设计图共同一套样式模板
-          model: new go.GraphLinksModel([
-            {key: this.guid(), text: '开始', figure: 'Circle', fill: '#4fba4f', stepType: 1},
-            this._jsonNewStep,
-            {key: this.guid(), text: '结束', figure: 'Circle', fill: '#CE0620', stepType: 4}
-          ])
-        });
+    return this.G(go.Palette, div, // 必须是DIV元素
+      {
+        maxSelectionCount: 3,
+        nodeTemplateMap: this._designer.nodeTemplateMap, // 跟设计图共同一套样式模板
+        model: new go.GraphLinksModel([
+          {key: this.guid(), text: '开始', figure: 'Circle', fill: '#4fba4f', stepType: 1},
+          this._jsonNewStep,
+          {key: this.guid(), text: '结束', figure: 'Circle', fill: '#CE0620', stepType: 4}
+        ])
+      });
 
-    return myPalette;
+  }
+
+  /**
+   * 创建新步骤
+   */
+  createStep() {
+    let jsonNewStep = {key: this._jsonNewStep.key, text: this._jsonNewStep.text};
+    jsonNewStep.loc = '270 140';// “新步骤”显示的位置
+    console.log(this._designer.model, this._designer);
+    this._designer.model.addNodeData(jsonNewStep);
+  }
+
+  /**
+   * 获取流程图数据
+   * @returns {*}
+   */
+  getFlowData() {
+    this._designer.model.modelData.position = go.Point.stringify(this._designer.position);
+    return this._designer.model.toJson();
+  };
+
+  /**
+   * 在设计面板中显示流程图
+   * @param flowData  流程图json数据
+   */
+  displayFlow(flowData) {
+
+    if (!flowData) return;
+
+    this._designer.model = go.Model.fromJson(flowData);
+
+    let pos = this._designer.model.modelData.position;
+    if (pos) this._designer.initialPosition = go.Point.parse(pos);
+
+    // 更改所有连线中间的文本背景色
+    this.setLinkTextBg();
   }
 
   /**
@@ -381,6 +416,23 @@ class FlowChartDesigner {
     //   updateNodeData(node,value);
     //   layer.close(index);
     // });
+  }
+
+  /**
+   * 更改所有连线中间的文本背景色
+   */
+  setLinkTextBg() {
+    this._designer.links.each(link => {
+      this._designer.startTransaction('vacate');
+      if (link.data.text) {
+        this._designer.model.setDataProperty(link.data, 'pFill', window.go.GraphObject.make(go.Brush, 'Radial', {
+          0: 'rgb(240, 240, 240)',
+          0.3: 'rgb(240, 240, 240)',
+          1: 'rgba(240, 240, 240, 0)'
+        }));
+      }
+      this._designer.commitTransaction('vacate');
+    });
   }
 }
 
