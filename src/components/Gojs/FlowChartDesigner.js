@@ -16,7 +16,6 @@ class FlowChartDesigner {
    * @param divId 设计器Div
    */
   init(divId) {
-    const _self = this;
     this._designer = this.G(go.Diagram, divId, // must name or refer to the DIV HTML element
       {
         grid: this.G(go.Panel, 'Grid',
@@ -106,7 +105,7 @@ class FlowChartDesigner {
   getFlowData() {
     this._designer.model.modelData.position = go.Point.stringify(this._designer.position);
     return this._designer.model.toJson();
-  };
+  }
 
   /**
    * 在设计面板中显示流程图
@@ -130,7 +129,7 @@ class FlowChartDesigner {
    * @returns {string}
    */
   guid() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
       let r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
       return v.toString(16);
     });
@@ -190,10 +189,10 @@ class FlowChartDesigner {
       this.makeNodePort('R', go.Spot.Right, true, true),
       this.makeNodePort('B', go.Spot.Bottom, true, false),
       {
-        mouseEnter: function (e, node) {
+        mouseEnter(e, node) {
           _self.showNodePort(node, true);
         },
-        mouseLeave: function (e, node) {
+        mouseLeave(e, node) {
           _self.showNodePort(node, false);
         }
       }
@@ -300,31 +299,31 @@ class FlowChartDesigner {
     const _self = this;
     return this.G(go.Adornment, 'Vertical',
       this.makeMenuItem('编辑',
-        function (e, obj) { // OBJ is this Button
+        (e, obj) => { // OBJ is this Button
           let contextmenu = obj.part; // the Button is in the context menu Adornment
           let part = contextmenu.adornedPart; // the adornedPart is the Part that the context menu adorns
           // now can do something with PART, or with its data, or with the Adornment (the context menu)
           _self.showEditNode(part);
         }),
       this.makeMenuItem('剪切',
-        function (e, obj) {
+        (e, obj) => {
           e.diagram.commandHandler.cutSelection();
         },
         function (o) {
           return o.diagram.commandHandler.canCutSelection();
         }),
       this.makeMenuItem('复制',
-        function (e, obj) {
+        (e, obj) => {
           e.diagram.commandHandler.copySelection();
         },
-        function (o) {
+        (o) => {
           return o.diagram.commandHandler.canCopySelection();
         }),
       this.makeMenuItem('删除',
-        function (e, obj) {
+        (e, obj) => {
           e.diagram.commandHandler.deleteSelection();
         },
-        function (o) {
+        (o) => {
           return o.diagram.commandHandler.canDeleteSelection();
         })
     );
