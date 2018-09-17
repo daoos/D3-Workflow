@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-// import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom';
 import './Pde.less';
 import * as  D3 from 'd3';
 
@@ -8,6 +8,9 @@ import Node from '../../common/Node/Node'
 /**
  * 拖拽
  */
+var points = [];
+var translate = null;
+
 class Pde extends Component {
 
   constructor() {
@@ -23,6 +26,10 @@ class Pde extends Component {
     this.dx = 0;
     this.dy = 0;
     this.dragElem = null;
+
+    this.drawLine = false;
+    this.activeLine = null;
+
 
     this.addNode = this.addNode.bind(this);
 
@@ -58,6 +65,12 @@ class Pde extends Component {
       )
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    console.log(prevProps);
+    console.log(prevState);
+    console.log(ReactDOM.findDOMNode(this));
+  }
+
   // 拖拽
   dragMove(d) {
     D3.event.sourceEvent.stopPropagation(); // silence other listeners
@@ -77,16 +90,23 @@ class Pde extends Component {
     let node = {
       id: new Date().getTime(),
       dataId: D3.select(el).attr('data-id'),
+      dataElementId: D3.select(el).attr('data-element-id'),
       text: D3.select(el).attr('title'),
       x: 155,
-      y: (170 * D3.selectAll('.node').size()) + 170 //自动布局
+      y: (170 * D3.selectAll('.node').size()) + 170, //自动布局
+      inputs: 1,
+      outputs: 1
     };
 
     // console.log();
-    let g = this.svg.append('g')
-      // .data(node)
-      .attr('class', 'node')
+    let gDjsGroup = this.svg.append('g')
+      .attr('class', 'djs-group');
+
+    let gdjsElement = gDjsGroup.append('g')
+    // .data(node)
+      .attr('class', 'node djs-element djs-shape')
       .attr('data-id', node.dataId)
+      .attr('data-id', node.dataElementId)
       .attr('id', node.id)
       // .attr('x', d => d.x)
       // .attr('y', d => d.y)
@@ -98,7 +118,29 @@ class Pde extends Component {
           .on('end', this.dragEnded)
       );
 
-    let rect = g.append('rect')
+    gDjsGroup.on('click', () => {
+      gdjsElement.attr('class', 'node djs-element djs-shape selected')
+    })
+      .on('mouseover', () => {
+        gdjsElement.attr('class', 'node djs-element djs-shape hover')
+      })
+      .on('mouseout', () => {
+        gdjsElement.attr('class', 'node djs-element djs-shape')
+      });
+
+    // selected hover的样式元素
+    gdjsElement.append('rect')
+      .attr('width', 112)
+      .attr('height', 92)
+      .attr('x', -6)
+      .attr('y', -6)
+      .attr('class', 'djs-outline')
+      .style('fill', 'none');
+
+    let gDjsVisual = gdjsElement.append('g')
+      .attr('class', 'djs-visual')
+
+    let rect = gDjsVisual.append('rect')
       .attr('width', 100)
       .attr('height', 80)
       .attr('rx', 10)
@@ -113,18 +155,59 @@ class Pde extends Component {
     let height = bound.height;
 
     // text
-    g.append('text')
+    gDjsVisual.append('text')
+      .attr('class', 'djs-label')
+      .attr('flii', 'balck')
+      .attr('lineHeight', '1.2')
+      .style('font-family', 'Arial, sans-serif')
+      .style('font-weight', 'normal')
+      .style('font-size', '12px')
+      .append('tspan')
       .text(node.text)
       .attr('x', width / 2)
       .attr('y', height / 2)
       .attr('text-anchor', 'middle') // 水平居中
 
 
-    return g;
-  }
+    let inputs = node.inputs || 0;
+    gdjsElement.attr('inputs', inputs);
+    for (var i = 0; i < inputs; i++) {
+      gdjsElement.append('circle')
+        .attr('class', 'input')
+        .attr('input', (i + 1))
+        .attr('cx', width * (i + 1) / (inputs + 1))
+        .attr('cy', 0)
+        .attr('r', 5);
+    }
 
-  addChildrenNode(e) {
+    // output circle
+    let outputs = node.outputs || 0;
+    gdjsElement.attr('outputs', outputs);
+    for (i = 0; i < outputs; i++) {
+      gdjsElement.append('circle')
+        .attr('output', (i + 1))
+        .attr('class', 'output')
+        .attr('cx', width * (i + 1) / (outputs + 1))
+        .attr('cy', height)
+        .attr('r', 5);
+    }
 
+    gDjsGroup.selectAll('circle.output').call(
+      D3.drag()
+        .on('start', this.linestarted)
+        .on('drag', this.linedragged)
+        .on('end', this.lineended)
+    );
+
+    gDjsGroup.selectAll('circle.input')
+      .on('mouseover', function () {
+        if (this.drawLine) {
+          D3.selectAll('circle.end').classed('end', false);
+          D3.select(this).classed('end', true);
+        }
+      });
+
+    return gdjsElement;
   }
 
   dragStarted() {
@@ -138,7 +221,7 @@ class Pde extends Component {
 
   dragGed() {
     this.dragElem.attr('transform', 'translate(' + (D3.event.x - this.dx) + ', ' + (D3.event.y - this.dy) + ')');
-    this.updateCable(this.dragElem);
+    // this.updateCable(this.dragElem);
   }
 
   dragEnded() {
@@ -199,7 +282,58 @@ class Pde extends Component {
             + ' ' + end[0] + ',' + end[1];
         });
       });
+  }
 
+
+  linestarted() {
+    this.drawLine = false;
+    // 当前选中的circle
+    var anchor = D3.select(this);
+    // 当前选中的节点
+    var node = D3.select(this.parentNode);
+    var rect = node.node().getBoundingClientRect();
+    var dx = rect.width / (+anchor.attr('output') + 1);
+    var dy = rect.height;
+    var transform = node.attr('transform');
+    let [x, y] = transform.substring(transform.indexOf('(') + 1, transform.indexOf(')')).split(',')
+    translate = [parseInt(x), parseInt(y)]
+    points.push([dx + parseInt(x), dy + parseInt(y)]);
+    this.activeLine = D3.select('svg')
+      .append('path')
+      .attr('class', 'cable')
+      .attr('from', node.attr('id'))
+      .attr('start', dx + ', ' + dy)
+      .attr('output', D3.select(this).attr('output'))
+      .attr('marker-end', 'url(#arrowhead)');
+  }
+
+  linedragged() {
+    this.drawLine = true;
+    points[1] = [D3.event.x + translate[0], D3.event.y + translate[1]];
+    this.activeLine.attr('d', function () {
+      return 'M' + points[0][0] + ',' + points[0][1]
+        + 'C' + points[0][0] + ',' + (points[0][1] + points[1][1]) / 2
+        + ' ' + points[1][0] + ',' + (points[0][1] + points[1][1]) / 2
+        + ' ' + points[1][0] + ',' + points[1][1];
+    });
+  }
+
+  lineended(d) {
+    this.drawLine = false;
+    var anchor = D3.selectAll('circle.end');
+    if (anchor.empty()) {
+      this.activeLine.remove();
+    } else {
+      var pNode = D3.select(anchor.node().parentNode);
+      var input = pNode.node().getBoundingClientRect().width / (+anchor.attr('input') + 1);
+      anchor.classed('end', false);
+      this.activeLine.attr('to', pNode.attr('id'));
+      this.activeLine.attr('input', anchor.attr('input'));
+      this.activeLine.attr('end', input + ', 0');
+    }
+    this.activeLine = null;
+    points.length = 0;
+    translate = null;
   }
 
 
@@ -215,7 +349,7 @@ class Pde extends Component {
               </button>
             </li>
             <li className="control">
-              <button title="add-children" data-id="1002" onClick={this.addChildrenNode.bind(this)}>
+              <button title="add-children" data-id="1002">
                 <i className="copy"/>
               </button>
             </li>

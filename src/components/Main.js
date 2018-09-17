@@ -7,10 +7,10 @@ import React from 'react';
 // import Workflow from './Workflow/Workflow';
 // import Bar from './Bar/Bar';
 // import Trag from './Trag/Trag';
-import Dagre from './Dagre/Dagre';
-import Pde from './Pde/Pde';
-import Tree from './Tree/Tree';
-
+// import Dagre from './Dagre/Dagre';
+// import Pde from './Pde/Pde';
+// import Tree from './Tree/Tree';
+import Gojs from './Gojs/Gojs'
 class AppComponent extends React.Component {
 
   constructor(){
@@ -20,8 +20,9 @@ class AppComponent extends React.Component {
   render() {
     return (
       <div className="index">
-        <Tree></Tree>
-        <Pde></Pde>
+        {/*<Tree></Tree>*/}
+        {/*<Pde></Pde>*/}
+        <Gojs></Gojs>
       </div>
     );
   }
