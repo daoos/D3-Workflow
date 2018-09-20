@@ -49,14 +49,19 @@ class Gojs extends Component {
     FlowChartDesigner.createStep();
   }
 
+  doDeleteStep() {
+    // FlowChartDesigner.deleteItem();
+  }
+
   saveDesigner() {
     let data = FlowChartDesigner.getFlowData();
+    console.log(data)
     this.setState({
-      data:data
+      data: data
     })
   }
 
-  handleChange(event){
+  handleChange(event) {
     this.setState({
       data: event.target.value
     })
@@ -64,23 +69,19 @@ class Gojs extends Component {
 
   render() {
     console.warn('GOJS')
-    let json = JSON.stringify(this.state.data)
+    let html = JSON.stringify(this.state.data)
     return (
       <div id="go-js">
         <button onClick={this.doCreateStep.bind(this)}>新建步骤</button>
+        <button onClick={this.doDeleteStep.bind(this)}>删除步骤</button>
         <button onClick={this.saveDesigner.bind(this)}>保存步骤</button>
         <div id="myPaletteDiv" className="my-palette-div"></div>
         <div id="myDiagramDiv" className="my-diagram-div"></div>
-        <textarea
-          onChange={this.handleChange.bind(this)}
-          name="mySavedModel"
+        <div
           id="mySavedModel"
-          cols="120"
-          rows="10"
-          value={json}
-          disabled
+          dangerouslySetInnerHTML={{__html: html}}
         >
-        </textarea>
+        </div>
       </div>
     );
   }

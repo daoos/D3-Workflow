@@ -24,8 +24,11 @@ class FlowChartDesigner {
           this.G(go.Shape, 'LineV', {stroke: 'lightgray', strokeWidth: 0.5}),
           this.G(go.Shape, 'LineV', {stroke: 'gray', strokeWidth: 0.5, interval: 10})
         ),
+        // 工具栏拖拽至画布
         allowDrop: true, // must be true to accept drops from the Palette
-        allowTextEdit: false,
+        // 编辑节点信息
+        // allowTextEdit: true,
+        // 画布滚动
         allowHorizontalScroll: false,
         allowVerticalScroll: false,
         'clickCreatingTool.archetypeNodeData': this._jsonNewStep, // 双击创建新步骤
@@ -78,11 +81,24 @@ class FlowChartDesigner {
     return this.G(go.Palette, div, // 必须是DIV元素
       {
         maxSelectionCount: 3,
-        nodeTemplateMap: this._designer.nodeTemplateMap, // 跟设计图共同一套样式模板
+        // 跟设计图共同一套样式模板
+        nodeTemplateMap: this._designer.nodeTemplateMap,
         model: new go.GraphLinksModel([
-          {key: this.guid(), text: '开始', figure: 'Circle', fill: '#4fba4f', stepType: 1},
+          {
+            key: this.guid(),
+            text: '开始',
+            figure: 'Circle',
+            fill: 'green',
+            stepType: 1
+          },
           this._jsonNewStep,
-          {key: this.guid(), text: '结束', figure: 'Circle', fill: '#CE0620', stepType: 4}
+          {
+            key: this.guid(),
+            text: '结束',
+            figure: 'Circle',
+            fill: 'red',
+            stepType: 4
+          }
         ])
       });
 
@@ -94,7 +110,6 @@ class FlowChartDesigner {
   createStep() {
     let jsonNewStep = {key: this._jsonNewStep.key, text: this._jsonNewStep.text};
     jsonNewStep.loc = '270 140';// “新步骤”显示的位置
-    console.log(this._designer.model, this._designer);
     this._designer.model.addNodeData(jsonNewStep);
   }
 
@@ -142,36 +157,54 @@ class FlowChartDesigner {
   makeNodeTemplate() {
     const _self = this;
     return this.G(go.Node, 'Spot',
-      {locationSpot: go.Spot.Center},
+      // return this.G(go.Node, 'Vertical',
+      {
+        locationSpot: go.Spot.Center
+      },
       new go.Binding('location', 'loc', go.Point.parse).makeTwoWay(go.Point.stringify),
-      {selectable: true, selectionAdornmentTemplate: this.makeNodeSelectionAdornmentTemplate()},
+      {
+        selectable: true,
+        selectionAdornmentTemplate: this.makeNodeSelectionAdornmentTemplate()
+      },
       new go.Binding('angle').makeTwoWay(),
       // the main object is a Panel that surrounds a TextBlock with a Shape
       this.G(go.Panel, 'Auto',
-        {name: 'PANEL'},
+        {
+          name: 'PANEL'
+        },
         new go.Binding('desiredSize', 'size', go.Size.parse).makeTwoWay(go.Size.stringify),
+        // Shape 图形形状
         this.G(go.Shape, 'RoundedRectangle', // default figure
           {
             portId: '', // the default port: if no spot on link data, use closest side
             fromLinkable: true,
             toLinkable: true,
             cursor: 'pointer',
-            fill: '#7e7e7f', // 默认背景色
-            strokeWidth: 1,
-            stroke: '#DDDDDD'
+            fill: 'white',
+            strokeWidth: 2,
+            stroke: 'black'
+            // width: 100,
+            // height: 60
           },
-          new go.Binding('figure'),
-          new go.Binding('fill')),
+          new go.Binding('figure')
+
+          // new go.Binding('fill')
+        ),
+        // 标签显示节点数据的文本
         this.G(go.TextBlock,
           {
-            font: 'bold 11pt Helvetica, Arial, sans-serif',
+            font: 'bold 16px Helvetica, Arial, sans-serif',
             margin: 8,
             maxSize: new go.Size(160, NaN),
             wrap: go.TextBlock.WrapFit,
-            editable: true,
-            stroke: 'white'
+            // 可编辑文本
+            editable: false,
+            stroke: 'black',
+            alignment: go.Spot.Center,
+            textAlign: 'center',
           },
-          new go.Binding('text').makeTwoWay()), // the label shows the node data's text
+          new go.Binding('text').makeTwoWay()
+        ),
         {
           toolTip:// this tooltip Adornment is shared by all nodes
             this.G(go.Adornment, 'Auto',
@@ -205,7 +238,14 @@ class FlowChartDesigner {
    */
   makeNodeSelectionAdornmentTemplate() {
     return this.G(go.Adornment, 'Auto',
-      this.G(go.Shape, {fill: null, stroke: 'deepskyblue', strokeWidth: 1.5, strokeDashArray: [4, 2]}),
+      this.G(go.Shape,
+        {
+          fill: null,
+          stroke: 'deepskyblue',
+          strokeWidth: 1.5,
+          strokeDashArray: [4, 2]
+        }
+      ),
       this.G(go.Placeholder)
     );
   }
@@ -234,7 +274,7 @@ class FlowChartDesigner {
         toLinkable: input, // declare whether the user may draw links to/from here
         cursor: 'pointer' // show a different cursor to indicate potential link point
       });
-  };
+  }
 
   /**
    * 定义连接线的样式模板
@@ -243,7 +283,11 @@ class FlowChartDesigner {
   makeLinkTemplate() {
     return this.G(go.Link, // the whole link panel
       {selectable: true, selectionAdornmentTemplate: this.makeLinkSelectionAdornmentTemplate()},
-      {relinkableFrom: true, relinkableTo: true, reshapable: true},
+      {
+        relinkableFrom: true,
+        relinkableTo: true,
+        reshapable: true
+      },
       {
         routing: go.Link.AvoidsNodes,
         curve: go.Link.JumpOver,
@@ -251,9 +295,17 @@ class FlowChartDesigner {
         toShortLength: 4
       },
       this.G(go.Shape, // 线条
-        {stroke: 'black'}),
+        {
+          stroke: 'black',
+          strokeWidth: 2
+        }
+      ),
       this.G(go.Shape, // 箭头
-        {toArrow: 'standard', stroke: null}),
+        {
+          toArrow: 'standard',
+          stroke: null
+        }
+      ),
       this.G(go.Panel, 'Auto',
         this.G(go.Shape, // 标签背景色
           {
@@ -327,7 +379,7 @@ class FlowChartDesigner {
           return o.diagram.commandHandler.canDeleteSelection();
         })
     );
-  };
+  }
 
   /**
    * 生成右键菜单项
@@ -343,9 +395,23 @@ class FlowChartDesigner {
         textAlign: 'left',
         stroke: '#555555'
       }),
-      {click: action},
+      {
+        click: action
+      },
       // don't bother with binding GraphObject.visible if there's no predicate
       visiblePredicate ? new go.Binding('visible', '', visiblePredicate).ofObject() : {});
+  }
+
+  deleteItem(){
+    return this.G(this.makeMenuItem(
+      '删除',
+      (e) => {
+        e.diagram.commandHandler.deleteSelection();
+      },
+      (o) => {
+        return o.diagram.commandHandler.canDeleteSelection();
+      }
+    ))
   }
 
   /**
